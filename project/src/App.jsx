@@ -9,6 +9,7 @@ function App() {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [pageData, setPageData] = useState([]);
 const [loading,setIsloading]=useState(false)
+const [error,setError]=useState(null)
   const handleChange = (event) => {
     setRowsPerPage(Number(event.target.value));
 
@@ -16,13 +17,19 @@ const [loading,setIsloading]=useState(false)
   };
 
   useEffect(() => {
+
     (async () => {
+    try {
       setIsloading(true)
       const response = await API.getData();
       setData(response.data);
       const delay = (ms) => new Promise((res) => setTimeout(res, ms));
       await delay(1000);
       setIsloading(false)
+    } catch (error) {
+      setIsloading(false)
+      setError('Error fetching data')
+    }
     })();
   }, []);
 
@@ -36,6 +43,11 @@ const [loading,setIsloading]=useState(false)
 if(loading){
   return(
     <SkeletonLoader/>
+  )
+}
+if(error){
+  return(
+    <h1 style={{display:'flex',justifyContent:'center',alignItems:'center'}}>{error}</h1>
   )
 }
 

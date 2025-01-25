@@ -1,8 +1,20 @@
-import { render, screen } from '@testing-library/react';
-import App from './App';
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import App from "./App";
+import API from "./API.tsx";
 
-test('renders learn react link', () => {
-  render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+// Mock the API
+jest.mock("./API.tsx", () => ({
+  getData: jest.fn(),
+}));
+
+describe("App Component - Basic Tests", () => {
+  it("renders the title correctly", () => {
+    render(<App />);
+    expect(screen.getByText("SaaS Demo")).toBeInTheDocument();
+  });
+
+  it('should render the "Next" button', () => {
+    render(<App />);
+    expect(screen.getByText("Percentage")).toBeInTheDocument();
+  });
 });
